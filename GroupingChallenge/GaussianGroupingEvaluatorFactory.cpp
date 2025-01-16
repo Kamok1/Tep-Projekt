@@ -88,6 +88,12 @@ vector<CGaussianDistribution>* CGaussianGroupingEvaluatorFactory::pv_create_gaus
 	return pv_gaussian_distributions;
 }
 
+
+mt19937& CGaussianGroupingEvaluatorFactory::cGetRandomEngine()
+{
+	return c_random_engine;
+}
+
 vector<CPoint>* CGaussianGroupingEvaluatorFactory::pv_create_points(vector<CGaussianDistribution>& vGaussianDistributions)
 {
 	vector<CPoint>* pv_points = new vector<CPoint>();

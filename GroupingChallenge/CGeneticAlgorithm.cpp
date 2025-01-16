@@ -6,14 +6,14 @@
 
 using namespace NGroupingChallenge;
 
-CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLowerBound, int iUpperBound, double dMutationProbability, int iNumIterations)
+CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLowerBound, int iUpperBound, double dMutationProbability, int iNumIterations, mt19937* cSharedRandomEngine)
     : i_population_size(iPopulationSize),
     i_num_genes(iNumGenes),
     i_lower_bound(iLowerBound),
     i_upper_bound(iUpperBound),
     d_mutation_probability(dMutationProbability),
     i_num_iterations(iNumIterations),
-    c_random_engine(random_device{}()),
+    c_random_engine(cSharedRandomEngine),
     d_best_fitness(numeric_limits<double>::max()){}
 
 CGeneticAlgorithm::~CGeneticAlgorithm()
@@ -63,34 +63,30 @@ CIndividual* CGeneticAlgorithm::cSelectBetterIndividual(CIndividual* cIndividual
 std::vector<CIndividual*> CGeneticAlgorithm::vSelectParents()
 {
     std::vector<CIndividual*> v_parents;
-    uniform_int_distribution<int> c_distribution(0, i_population_size - 1);
+    std::uniform_int_distribution<int> c_distribution(0, i_population_size - 1);
 
     while (v_parents.size() < i_population_size)
     {
-        int i_first_candidate = c_distribution(c_random_engine);
-        int i_second_candidate = c_distribution(c_random_engine);
-        CIndividual* c_parent1 = cSelectBetterIndividual(v_population[i_first_candidate], v_population[i_second_candidate]);
+        int i_candidate1 = c_distribution(*c_random_engine);
+        int i_candidate2 = c_distribution(*c_random_engine);
 
-        int i_third_candidate = c_distribution(c_random_engine);
-        int i_fourth_candidate = c_distribution(c_random_engine);
-        CIndividual* c_parent2 = cSelectBetterIndividual(v_population[i_third_candidate], v_population[i_fourth_candidate]);
-
-        v_parents.push_back(c_parent1);
-        v_parents.push_back(c_parent2);
+        CIndividual* c_parent = cSelectBetterIndividual(v_population[i_candidate1], v_population[i_candidate2]);
+        v_parents.push_back(c_parent);
     }
 
     return v_parents;
 }
 
-
 void CGeneticAlgorithm::vGenerateNewPopulation(const std::vector<CIndividual*>& vParents)
 {
     std::vector<CIndividual*> new_v_population;
 
-    for (size_t i = 0; i < vParents.size(); i += 2)
+    for (size_t i = 0; i < vParents.size(); i += DEFAULT_PARENTS_SIZE)
     {
-        if (i + 1 >= vParents.size()) break; //wywalic tego break
-        std::pair<CIndividual, CIndividual> children = vParents[i]->cCrossover(*vParents[i + 1]);
+        CIndividual* parent1 = vParents[i];
+        CIndividual* parent2 = (i + DEFAULT_NEXT_PARENT_INDEX < vParents.size()) ? vParents[i + DEFAULT_NEXT_PARENT_INDEX] : vParents[i];
+
+        std::pair<CIndividual, CIndividual> children = parent1->cCrossover(*parent2);
         children.first.vMutate(d_mutation_probability);
         children.second.vMutate(d_mutation_probability);
 
@@ -103,7 +99,6 @@ void CGeneticAlgorithm::vGenerateNewPopulation(const std::vector<CIndividual*>& 
         delete individual;
     }
     v_population.clear();
-
     v_population = std::move(new_v_population);
 }
 

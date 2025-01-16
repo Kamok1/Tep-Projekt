@@ -18,7 +18,6 @@ namespace NGroupingChallenge
 
 		double dGenerateRandomMean();
 		double dGenerateRandomStandardDeviation();
-
 	private:
 		const double d_DEFAULT_STANDARD_DEVIATION_VALUE = 1.0;
 
@@ -45,7 +44,7 @@ namespace NGroupingChallenge
 		CGaussianGroupingEvaluatorFactory(int iNumberOfGroups, int iNumberOfPoints);
 
 		CGaussianGroupingEvaluatorFactory& cAddDimension(double dMeanMin, double dMeanMax, double dStandardDeviationMin, double dStandardDeviationMax);
-
+		mt19937& cGetRandomEngine();
 		CGroupingEvaluator* pcCreateEvaluator();
 		CGroupingEvaluator* pcCreateEvaluator(unsigned int iSeed);
 

@@ -6,6 +6,8 @@
 #include <random>
 #include "CIndividual.h"
 
+#define DEFAULT_PARENTS_SIZE 2
+#define DEFAULT_NEXT_PARENT_INDEX 1
 using namespace std;
 
 namespace NGroupingChallenge
@@ -13,7 +15,7 @@ namespace NGroupingChallenge
     class CGeneticAlgorithm
     {
     public:
-        CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLowerBound, int iUpperBound, double dMutationProbability, int iNumIterations);
+        CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLowerBound, int iUpperBound, double dMutationProbability, int iNumIterations, mt19937* cSharedRandomEngine);
         ~CGeneticAlgorithm();
         void vRun();
         const CIndividual& cGetBestIndividual() const;
@@ -36,7 +38,7 @@ namespace NGroupingChallenge
         std::vector<CIndividual*> v_population;
         CIndividual c_best_individual;
         double d_best_fitness;
-        mt19937 c_random_engine;
+        mt19937* c_random_engine;
         CGroupingEvaluator* pc_evaluator;
 
     };
