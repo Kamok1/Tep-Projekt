@@ -85,7 +85,7 @@ std::pair<CIndividual, CIndividual> CIndividual::cCrossover(const CIndividual& c
         return { *this, cOther };
     }
 
-    size_t i_crossover_point = DEFAULT_CROSSOVER_POINT;
+    int i_crossover_point = DEFAULT_CROSSOVER_POINT;
     if (c_random_engine)
     {
         std::uniform_int_distribution<size_t> c_point_distribution(MIN_CROSSOVER_POINT, v_genes.size() - 1);

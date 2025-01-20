@@ -138,6 +138,7 @@
     <ClInclude Include="GroupingEvaluator.h" />
     <ClInclude Include="Optimizer.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="SharedValues.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

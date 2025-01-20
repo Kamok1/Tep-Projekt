@@ -6,11 +6,12 @@
 
 using namespace NGroupingChallenge;
 
-CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLowerBound, int iUpperBound, double dMutationProbability, int iNumIterations, mt19937* cSharedRandomEngine)
+CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLowerBound, int iUpperBound, double dCrossoverProbabilty, double dMutationProbability, int iNumIterations, mt19937* cSharedRandomEngine)
     : i_population_size(iPopulationSize),
     i_num_genes(iNumGenes),
     i_lower_bound(iLowerBound),
     i_upper_bound(iUpperBound),
+    d_crossover_probability(dCrossoverProbabilty),
     d_mutation_probability(dMutationProbability),
     i_num_iterations(iNumIterations),
     c_random_engine(cSharedRandomEngine),
@@ -66,7 +67,8 @@ std::vector<CIndividual*> CGeneticAlgorithm::vSelectParents()
     std::uniform_int_distribution<int> c_distribution(0, i_population_size - 1);
 
     while (v_parents.size() < i_population_size)
-    {
+    { 
+
         int i_candidate1 = c_distribution(*c_random_engine);
         int i_candidate2 = c_distribution(*c_random_engine);
 
@@ -80,18 +82,27 @@ std::vector<CIndividual*> CGeneticAlgorithm::vSelectParents()
 void CGeneticAlgorithm::vGenerateNewPopulation(const std::vector<CIndividual*>& vParents)
 {
     std::vector<CIndividual*> new_v_population;
+    std::uniform_real_distribution<double> c_probability_distribution(MIN_PROPABILITY, MAX_PROPABILITY);
 
     for (size_t i = 0; i < vParents.size(); i += DEFAULT_PARENTS_SIZE)
     {
         CIndividual* parent1 = vParents[i];
         CIndividual* parent2 = (i + DEFAULT_NEXT_PARENT_INDEX < vParents.size()) ? vParents[i + DEFAULT_NEXT_PARENT_INDEX] : vParents[i];
 
-        std::pair<CIndividual, CIndividual> children = parent1->cCrossover(*parent2);
-        children.first.vMutate(d_mutation_probability);
-        children.second.vMutate(d_mutation_probability);
+        if (c_probability_distribution(*c_random_engine) < d_mutation_probability)
+        {;
+            new_v_population.push_back(new CIndividual(*parent1));
+            new_v_population.push_back(new CIndividual(*parent2));
+        }
+        else
+        {
+            std::pair<CIndividual, CIndividual> children = parent1->cCrossover(*parent2);
+            children.first.vMutate(d_mutation_probability);
+            children.second.vMutate(d_mutation_probability);
 
-        new_v_population.push_back(new CIndividual(std::move(children.first)));
-        new_v_population.push_back(new CIndividual(std::move(children.second)));
+            new_v_population.push_back(new CIndividual(std::move(children.first)));
+            new_v_population.push_back(new CIndividual(std::move(children.second)));
+        }
     }
 
     for (auto* individual : v_population)

@@ -56,5 +56,8 @@
     <ClInclude Include="CIndividual.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SharedValues.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

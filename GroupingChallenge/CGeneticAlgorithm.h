@@ -5,6 +5,7 @@
 #include <vector>
 #include <random>
 #include "CIndividual.h"
+#include "SharedValues.h"
 
 #define DEFAULT_PARENTS_SIZE 2
 #define DEFAULT_NEXT_PARENT_INDEX 1
@@ -15,7 +16,7 @@ namespace NGroupingChallenge
     class CGeneticAlgorithm
     {
     public:
-        CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLowerBound, int iUpperBound, double dMutationProbability, int iNumIterations, mt19937* cSharedRandomEngine);
+        CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLowerBound, int iUpperBound, double dCrossoverProbabilty, double dMutationProbability, int iNumIterations, mt19937* cSharedRandomEngine);
         ~CGeneticAlgorithm();
         void vRun();
         const CIndividual& cGetBestIndividual() const;
@@ -32,6 +33,7 @@ namespace NGroupingChallenge
         int i_num_genes;
         int i_lower_bound;
         int i_upper_bound;
+        double d_crossover_probability;
         double d_mutation_probability;
         int i_num_iterations;
 

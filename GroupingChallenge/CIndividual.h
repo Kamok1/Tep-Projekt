@@ -3,12 +3,10 @@
 
 #include <vector>
 #include <random>
-
+#include "SharedValues.h"
 #define DEFAULT_CROSSOVER_POINT 1
-#define MIN_PROPABILITY 0.0
-#define MAX_PROPABILITY 1.0
 #define DEFAULT_FITNESS 0.0
-#define DEFAULT_UPPER_BOUND 0
+#define DEFAULT_UPPER_BOUND 10
 #define DEFAULT_LOWER_BOUND 0
 #define MIN_CROSSOVER_POINT 1
 using namespace std;

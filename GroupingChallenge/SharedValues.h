@@ -1,0 +1,7 @@
+#ifndef SHARED_VALUES_H
+#define SHARED_VALUES_H
+
+#define MIN_PROPABILITY 0.0
+#define MAX_PROPABILITY 1.0
+
+#endif

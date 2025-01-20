@@ -2,8 +2,8 @@
 
 using namespace NGroupingChallenge;
 
-CGroupingEvaluator::CGroupingEvaluator(int iNumberOfGroups, const vector<CPoint>& vPoints)
-	: i_number_of_groups(iNumberOfGroups), v_points(vPoints)
+CGroupingEvaluator::CGroupingEvaluator(int numberOfGroups, const vector<CPoint>& vPoints)
+	: i_number_of_groups(numberOfGroups), v_points(vPoints)
 {
 
 }
@@ -62,16 +62,10 @@ double CGroupingEvaluator::dEvaluate(const vector<int>* pvSolution) const
 
 double CGroupingEvaluator::dEvaluate(const vector<int>& vSolution) const
 {
-	double d_total_distance = 0.0;
-	for (size_t i = 0; i < v_points.size(); ++i)
+	if (vSolution.size() != v_points.size())
 	{
-		for (size_t j = i + 1; j < v_points.size(); ++j)
-		{
-			if (vSolution[i] == vSolution[j])
-			{
-				d_total_distance += v_points[i].dCalculateDistance(v_points[j]);
-			}
-		}
+		return d_WRONG_VALUE;
 	}
-	return d_total_distance;
+
+	return dEvaluate(vSolution.data());
 }

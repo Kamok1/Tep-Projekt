@@ -41,7 +41,7 @@ namespace NGroupingChallenge
 	class CGaussianGroupingEvaluatorFactory
 	{
 	public:
-		CGaussianGroupingEvaluatorFactory(int iNumberOfGroups, int iNumberOfPoints);
+		CGaussianGroupingEvaluatorFactory(int numberOfGroups, int iNumberOfPoints);
 
 		CGaussianGroupingEvaluatorFactory& cAddDimension(double dMeanMin, double dMeanMax, double dStandardDeviationMin, double dStandardDeviationMax);
 		mt19937& cGetRandomEngine();

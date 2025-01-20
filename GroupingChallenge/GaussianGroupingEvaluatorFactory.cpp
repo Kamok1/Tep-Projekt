@@ -38,8 +38,8 @@ double CGaussianDistribution::dGenerateRandomNumber()
 	return c_normal_distribution(c_random_engine);
 }
 
-CGaussianGroupingEvaluatorFactory::CGaussianGroupingEvaluatorFactory(int iNumberOfGroups, int iNumberOfPoints)
-	: i_number_of_groups(max(iNumberOfGroups, i_NUMBER_OF_GROUPS_MIN_VALUE)), i_number_of_points(max(iNumberOfPoints, i_NUMBER_OF_GROUPS_MIN_VALUE))
+CGaussianGroupingEvaluatorFactory::CGaussianGroupingEvaluatorFactory(int numberOfGroups, int iNumberOfPoints)
+	: i_number_of_groups(max(numberOfGroups, i_NUMBER_OF_GROUPS_MIN_VALUE)), i_number_of_points(max(iNumberOfPoints, i_NUMBER_OF_GROUPS_MIN_VALUE))
 {
 
 }

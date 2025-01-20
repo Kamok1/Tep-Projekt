@@ -12,7 +12,7 @@ namespace NGroupingChallenge
 	class CGroupingEvaluator
 	{
 	public:
-		CGroupingEvaluator(int iNumberOfGroups, const vector<CPoint>& vPoints);
+		CGroupingEvaluator(int numberOfGroups, const vector<CPoint>& vPoints);
 
 		double dEvaluate(const int* piSolution) const;
 		double dEvaluate(const vector<int>* pvSolution) const;
