@@ -9,7 +9,7 @@ CIndividual::CIndividual(int iNumGenes, int iLowerBound, int iUpperBound, std::m
     : i_lower_bound(iLowerBound),
     i_upper_bound(iUpperBound),
     c_random_engine(cRandomEngine),
-    d_fitness(DEFAULT_FITNESS)
+    d_fitness(d_DEFAULT_FITNESS)
 {
     if (i_lower_bound > i_upper_bound)
     {
@@ -30,7 +30,7 @@ CIndividual::CIndividual(int iNumGenes, int iLowerBound, int iUpperBound, std::m
 }
 
 CIndividual::CIndividual()
-    : d_fitness(DEFAULT_FITNESS), i_lower_bound(DEFAULT_LOWER_BOUND), i_upper_bound(DEFAULT_UPPER_BOUND), c_random_engine(nullptr){}
+    : d_fitness(d_DEFAULT_FITNESS), i_lower_bound(i_DEFAULT_LOWER_BOUND), i_upper_bound(i_DEFAULT_UPPER_BOUND), c_random_engine(nullptr){}
 
 CIndividual::CIndividual(const CIndividual& other)
     : v_genes(other.v_genes),
@@ -66,7 +66,7 @@ void CIndividual::vMutate(double dMutationProbability)
         return;
     }
 
-    std::uniform_real_distribution<double> c_probability_distribution(MIN_PROPABILITY, MAX_PROPABILITY);
+    std::uniform_real_distribution<double> c_probability_distribution(d_MIN_PROPABILITY, d_MAX_PROPABILITY);
     std::uniform_int_distribution<int> c_value_distribution(i_lower_bound, i_upper_bound);
 
     for (auto& gene : v_genes)
@@ -85,10 +85,10 @@ std::pair<CIndividual, CIndividual> CIndividual::cCrossover(const CIndividual& c
         return { *this, cOther };
     }
 
-    int i_crossover_point = DEFAULT_CROSSOVER_POINT;
+    int i_crossover_point = i_DEFAULT_CROSSOVER_POINT;
     if (c_random_engine)
     {
-        std::uniform_int_distribution<size_t> c_point_distribution(MIN_CROSSOVER_POINT, v_genes.size() - 1);
+        std::uniform_int_distribution<size_t> c_point_distribution(i_MIN_CROSSOVER_POINT, v_genes.size() - 1);
         i_crossover_point = c_point_distribution(*c_random_engine);
     }
 

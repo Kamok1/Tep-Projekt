@@ -7,61 +7,72 @@
 using namespace std;
 using namespace NGroupingChallenge;
 
-#define NUMBER_OF_GROUPS 20
-#define NUMBER_OF_POINTS 100
-#define POPULATION_SIZE 10
-#define LOWER_BOUND 1
-#define UPPER_BOUND NUMBER_OF_GROUPS
-#define MUTATION_PROBABILITY 0.2
-#define CROSSOVER_PROBABILITY 0.8
-#define NUMBER_OF_ITERATIONS 1000
-#define DIMENSIONS 6
-#define DIMENSION_MEAN_MIN -100
-#define DIMENSION_MEAN_MAX 100
-#define DIMENSION_STANDARD_DEVIATION_MIN 1.0
-#define DIMENSION_STANDARD_DEVIATION_MAX 1.0
-#define BEST_GENES_MESSAGE "Best individual genes: "
-#define BEST_FITNESS_MESSAGE "Best fitness: "
-#define INVALID_BOUNDS_MESSAGE "Invalid bounds"
-#define INVALID_PARAMETERS_MESSAGE "Invalid algorithm parameters"
+const int i_NUMBER_OF_GROUPS = 20;
+const int i_NUMBER_OF_POINTS = 100;
+const int i_POPULATION_SIZE = 10;
+const int i_LOWER_BOUND = 1;
+const int i_UPPER_BOUND = i_NUMBER_OF_GROUPS;
+const int i_NUMBER_OF_ITERATIONS = 1000;
+const int i_DIMENSIONS = 6;
+const int i_DIMENSION_MEAN_MIN = -100;
+const int i_DIMENSION_MEAN_MAX = 100;
+
+const double d_MUTATION_PROBABILITY = 0.2;
+const double d_CROSSOVER_PROBABILITY = 0.8;
+const double d_DIMENSION_STANDARD_DEVIATION_MIN = 1.0;
+const double d_DIMENSION_STANDARD_DEVIATION_MAX = 1.0;
+
+const string s_BEST_GENES_MESSAGE = "Best individual genes: ";
+const string s_BEST_FITNESS_MESSAGE = "Best fitness: ";
+const string s_INVALID_BOUNDS_MESSAGE = "Invalid bounds";
+const string s_INVALID_PARAMETERS_MESSAGE = "Invalid algorithm parameters";
 
 void PrintBestIndividual(const CIndividual& c_best_individual)
 {
-    cout << BEST_GENES_MESSAGE;
+    cout << s_BEST_GENES_MESSAGE;
     for (auto gene : c_best_individual.vGetGenes())
     {
         cout << gene << " ";
     }
     cout << endl;
 
-    cout << BEST_FITNESS_MESSAGE << c_best_individual.dGetFitness() << endl;
+    cout << s_BEST_FITNESS_MESSAGE << c_best_individual.dGetFitness() << endl;
 }
 
 int main()
 {
-    CGaussianGroupingEvaluatorFactory c_factory(NUMBER_OF_GROUPS, NUMBER_OF_POINTS);
-    for (int i = 0; i < DIMENSIONS; i++)
+    CGaussianGroupingEvaluatorFactory c_factory(i_NUMBER_OF_GROUPS, i_NUMBER_OF_POINTS);
+    for (int i = 0; i < i_DIMENSIONS; i++)
     {
-        c_factory.cAddDimension(DIMENSION_MEAN_MIN, DIMENSION_MEAN_MAX, DIMENSION_STANDARD_DEVIATION_MIN, DIMENSION_STANDARD_DEVIATION_MAX);
+        c_factory.cAddDimension(i_DIMENSION_MEAN_MIN, i_DIMENSION_MEAN_MAX, d_DIMENSION_STANDARD_DEVIATION_MIN, d_DIMENSION_STANDARD_DEVIATION_MAX);
     }
 
     CGroupingEvaluator* pc_evaluator(c_factory.pcCreateEvaluator());
 
-    if (LOWER_BOUND < 0 || UPPER_BOUND < 0 || UPPER_BOUND < LOWER_BOUND)
+    if (i_LOWER_BOUND < 0 || i_UPPER_BOUND < 0 || i_UPPER_BOUND < i_LOWER_BOUND)
     {
-		cerr << INVALID_BOUNDS_MESSAGE << endl;
-		return 1;
-	}
-
-	if (POPULATION_SIZE <= 0 || NUMBER_OF_POINTS < 0 || MUTATION_PROBABILITY > 1 || NUMBER_OF_ITERATIONS <= 0)
-	{
-        cerr << INVALID_PARAMETERS_MESSAGE << endl;
+        cerr << s_INVALID_BOUNDS_MESSAGE << endl;
         return 1;
-	}
+    }
 
-    CGeneticAlgorithm c_algorithm(POPULATION_SIZE, NUMBER_OF_POINTS, LOWER_BOUND, UPPER_BOUND, CROSSOVER_PROBABILITY, MUTATION_PROBABILITY, NUMBER_OF_ITERATIONS, &c_factory.cGetRandomEngine());
+    if (i_POPULATION_SIZE <= 0 || i_NUMBER_OF_POINTS < 0 || d_MUTATION_PROBABILITY > 1 || i_NUMBER_OF_ITERATIONS <= 0)
+    {
+        cerr << s_INVALID_PARAMETERS_MESSAGE << endl;
+        return 1;
+    }
+
+    CGeneticAlgorithm c_algorithm(
+        i_POPULATION_SIZE,
+        i_NUMBER_OF_POINTS,
+        i_LOWER_BOUND,
+        i_UPPER_BOUND,
+        d_CROSSOVER_PROBABILITY,
+        d_MUTATION_PROBABILITY,
+        i_NUMBER_OF_ITERATIONS,
+        &c_factory.cGetRandomEngine()
+    );
     c_algorithm.vSetEvaluator(*pc_evaluator);
-    c_algorithm.vRun();     
+    c_algorithm.vRun();
 
     const CIndividual& c_best_individual = c_algorithm.cGetBestIndividual();
     delete pc_evaluator;

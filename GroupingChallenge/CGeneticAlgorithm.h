@@ -7,8 +7,6 @@
 #include "CIndividual.h"
 #include "SharedValues.h"
 
-#define DEFAULT_PARENTS_SIZE 2
-#define DEFAULT_NEXT_PARENT_INDEX 1
 using namespace std;
 
 namespace NGroupingChallenge
@@ -23,6 +21,8 @@ namespace NGroupingChallenge
         void vSetEvaluator(CGroupingEvaluator& cEvaluator);
 
     private:
+        const int i_DEFAULT_PARENTS_SIZE = 2;
+        const int i_DEFAULT_NEXT_PARENT_INDEX = 1;
         void vInitializePopulation();
         void vEvaluatePopulation();
         vector<CIndividual*> vSelectParents();

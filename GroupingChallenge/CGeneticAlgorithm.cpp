@@ -82,12 +82,12 @@ std::vector<CIndividual*> CGeneticAlgorithm::vSelectParents()
 void CGeneticAlgorithm::vGenerateNewPopulation(const std::vector<CIndividual*>& vParents)
 {
     std::vector<CIndividual*> new_v_population;
-    std::uniform_real_distribution<double> c_probability_distribution(MIN_PROPABILITY, MAX_PROPABILITY);
+    std::uniform_real_distribution<double> c_probability_distribution(d_MIN_PROPABILITY, d_MAX_PROPABILITY);
 
-    for (size_t i = 0; i < vParents.size(); i += DEFAULT_PARENTS_SIZE)
+    for (size_t i = 0; i < vParents.size(); i += i_DEFAULT_PARENTS_SIZE)
     {
         CIndividual* parent1 = vParents[i];
-        CIndividual* parent2 = (i + DEFAULT_NEXT_PARENT_INDEX < vParents.size()) ? vParents[i + DEFAULT_NEXT_PARENT_INDEX] : vParents[i];
+        CIndividual* parent2 = (i + i_DEFAULT_NEXT_PARENT_INDEX < vParents.size()) ? vParents[i + i_DEFAULT_NEXT_PARENT_INDEX] : vParents[i];
 
         if (c_probability_distribution(*c_random_engine) < d_mutation_probability)
         {;

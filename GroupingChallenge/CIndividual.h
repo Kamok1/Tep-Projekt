@@ -4,11 +4,6 @@
 #include <vector>
 #include <random>
 #include "SharedValues.h"
-#define DEFAULT_CROSSOVER_POINT 1
-#define DEFAULT_FITNESS 0.0
-#define DEFAULT_UPPER_BOUND 10
-#define DEFAULT_LOWER_BOUND 0
-#define MIN_CROSSOVER_POINT 1
 using namespace std;
 
 namespace NGroupingChallenge
@@ -28,6 +23,12 @@ namespace NGroupingChallenge
         const vector<int>& vGetGenes() const;
 
     private:
+        const int i_DEFAULT_CROSSOVER_POINT = 1;
+        const double d_DEFAULT_FITNESS = 0.0;
+        const int i_DEFAULT_UPPER_BOUND = 10;
+        const int i_DEFAULT_LOWER_BOUND = 0;
+        const int i_MIN_CROSSOVER_POINT = 1;
+
         vector<int> v_genes;
         double d_fitness;
         int i_lower_bound;
