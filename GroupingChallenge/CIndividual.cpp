@@ -70,13 +70,13 @@ void CIndividual::vMutate(double dMutationProbability)
     }
 }
 
-std::pair<CIndividual, CIndividual> CIndividual::cCrossover(const CIndividual& cOther, double dCrossoverProbabilty) const
+std::pair<CIndividual*, CIndividual*> CIndividual::cCrossover(const CIndividual& cOther, double dCrossoverProbabilty) const
 {
     std::uniform_real_distribution<double> c_probability_distribution(d_MIN_PROPABILITY, d_MAX_PROPABILITY);
 
     if (v_genes.empty() || cOther.v_genes.empty() || c_probability_distribution(c_random_engine) > dCrossoverProbabilty)
     {
-        return { *this, cOther };
+        return { new CIndividual(*this), new CIndividual(cOther) };
     }
 
     std::uniform_int_distribution<size_t> c_point_distribution(i_MIN_CROSSOVER_POINT, v_genes.size() - 1);
@@ -88,14 +88,15 @@ std::pair<CIndividual, CIndividual> CIndividual::cCrossover(const CIndividual& c
     v_child1_genes.insert(v_child1_genes.end(), cOther.v_genes.begin() + i_crossover_point, cOther.v_genes.end());
     v_child2_genes.insert(v_child2_genes.end(), v_genes.begin() + i_crossover_point, v_genes.end());
 
-    CIndividual c_child1(c_random_engine, pc_evaluator);
-    CIndividual c_child2(c_random_engine, pc_evaluator);
+    CIndividual* c_child1 = new CIndividual(c_random_engine, pc_evaluator);
+    CIndividual* c_child2 = new CIndividual(c_random_engine, pc_evaluator);
 
-    c_child1.vSetGenes(v_child1_genes);
-    c_child2.vSetGenes(v_child2_genes);
+    c_child1->vSetGenes(v_child1_genes);
+    c_child2->vSetGenes(v_child2_genes);
 
     return { c_child1, c_child2 };
 }
+
 
 
 double CIndividual::dGetFitness()

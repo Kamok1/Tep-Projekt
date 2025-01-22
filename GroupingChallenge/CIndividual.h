@@ -18,7 +18,7 @@ namespace NGroupingChallenge
         CIndividual& operator=(const CIndividual& other);
         void vMutate(double dMutationProbability);
         void vSetFitness(double dFitness);
-        pair<CIndividual, CIndividual> cCrossover(const CIndividual& cOther, double dCrossoverProbabilty) const;
+        pair<CIndividual*, CIndividual*> cCrossover(const CIndividual& cOther, double dCrossoverProbabilty) const;
         void vSetGenes(const vector<int>& vGenes);
         const vector<int>& vGetGenes() const;
         double dGetFitness();

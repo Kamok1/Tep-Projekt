@@ -19,10 +19,7 @@ CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, double dCrossoverProba
 
 CGeneticAlgorithm::~CGeneticAlgorithm()
 {
-    for (auto* individual : v_population)
-    {
-        delete individual;
-    }
+    std::for_each(v_population.begin(), v_population.end(), [](CIndividual* individual) { delete individual; });
     v_population.clear();
 }
 
@@ -80,19 +77,14 @@ void CGeneticAlgorithm::vGenerateNewPopulation(const std::vector<CIndividual*>& 
         CIndividual* parent1 = vParents[i];
         CIndividual* parent2 = (i + i_DEFAULT_NEXT_PARENT_INDEX < vParents.size()) ? vParents[i + i_DEFAULT_NEXT_PARENT_INDEX] : vParents[i];
 
+        std::pair<CIndividual*, CIndividual*> children = parent1->cCrossover(*parent2, d_crossover_probability);
+        children.first->vMutate(d_mutation_probability);
+        children.second->vMutate(d_mutation_probability);
 
-        std::pair<CIndividual, CIndividual> children = parent1->cCrossover(*parent2, d_crossover_probability);
-        children.first.vMutate(d_mutation_probability);
-        children.second.vMutate(d_mutation_probability);
-
-        new_v_population.push_back(new CIndividual(std::move(children.first)));
-        new_v_population.push_back(new CIndividual(std::move(children.second)));
+        new_v_population.push_back(children.first);
+        new_v_population.push_back(children.second);
     }
-
-    for (auto* individual : v_population)
-    {
-        delete individual;
-    }
+    std::for_each(v_population.begin(), v_population.end(), [](CIndividual* individual) { delete individual; });
     v_population.clear();
     v_population = std::move(new_v_population);
 }

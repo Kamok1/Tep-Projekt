@@ -7,11 +7,11 @@
 using namespace std;
 using namespace NGroupingChallenge;
 
-const int i_NUMBER_OF_GROUPS = 20;
-const int i_NUMBER_OF_POINTS = 100;
-const int i_POPULATION_SIZE = 10;
-const int i_NUMBER_OF_ITERATIONS = 1000;
-const int i_DIMENSIONS = 6;
+const int i_NUMBER_OF_GROUPS = 5;
+const int i_NUMBER_OF_POINTS = 30;
+const int i_POPULATION_SIZE = 20;
+const int i_NUMBER_OF_ITERATIONS = 20000;
+const int i_DIMENSIONS = 3;
 const int i_DIMENSION_MEAN_MIN = -100;
 const int i_DIMENSION_MEAN_MAX = 100;
 
@@ -64,9 +64,8 @@ int main()
     c_algorithm.vRun();
 
     CIndividual& c_best_individual = c_algorithm.cGetBestIndividual();
-    delete pc_evaluator;
-
     PrintBestIndividual(c_best_individual);
+    delete pc_evaluator;
 
     return 0;
 }
