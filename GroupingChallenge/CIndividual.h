@@ -14,6 +14,7 @@ namespace NGroupingChallenge
     public:
         CIndividual(mt19937& cRandomEngine, CGroupingEvaluator& pcEvaluator);
         CIndividual(const CIndividual& other);
+        CIndividual(CIndividual&& other);
         CIndividual& operator=(const CIndividual& other);
         void vMutate(double dMutationProbability);
         void vSetFitness(double dFitness);

@@ -40,6 +40,17 @@ CIndividual& CIndividual::operator=(const CIndividual& other)
     return *this;
 }
 
+CIndividual::CIndividual(CIndividual&& other)
+    : v_genes(std::move(other.v_genes)),
+    d_fitness(other.d_fitness),
+    i_lower_bound(other.i_lower_bound),
+    i_upper_bound(other.i_upper_bound),
+    c_random_engine(other.c_random_engine), 
+    pc_evaluator(other.pc_evaluator)
+{
+    other.d_fitness = d_DEFAULT_FITNESS;
+}
+
 void CIndividual::vSetFitness(double dFitness)
 {
     d_fitness = dFitness;
