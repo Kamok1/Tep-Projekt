@@ -10,8 +10,6 @@ using namespace NGroupingChallenge;
 const int i_NUMBER_OF_GROUPS = 20;
 const int i_NUMBER_OF_POINTS = 100;
 const int i_POPULATION_SIZE = 10;
-const int i_LOWER_BOUND = 1;
-const int i_UPPER_BOUND = i_NUMBER_OF_GROUPS;
 const int i_NUMBER_OF_ITERATIONS = 1000;
 const int i_DIMENSIONS = 6;
 const int i_DIMENSION_MEAN_MIN = -100;
@@ -24,7 +22,6 @@ const double d_DIMENSION_STANDARD_DEVIATION_MAX = 1.0;
 
 const string s_BEST_GENES_MESSAGE = "Best individual genes: ";
 const string s_BEST_FITNESS_MESSAGE = "Best fitness: ";
-const string s_INVALID_BOUNDS_MESSAGE = "Invalid bounds";
 const string s_INVALID_PARAMETERS_MESSAGE = "Invalid algorithm parameters";
 
 void PrintBestIndividual(CIndividual& c_best_individual)
@@ -49,11 +46,6 @@ int main()
 
     CGroupingEvaluator* pc_evaluator(c_factory.pcCreateEvaluator());
 
-    if (i_LOWER_BOUND < 0 || i_UPPER_BOUND < 0 || i_UPPER_BOUND < i_LOWER_BOUND)
-    {
-        cerr << s_INVALID_BOUNDS_MESSAGE << endl;
-        return 1;
-    }
 
     if (i_POPULATION_SIZE <= 0 || i_NUMBER_OF_POINTS < 0 || d_MUTATION_PROBABILITY > 1 || i_NUMBER_OF_ITERATIONS <= 0)
     {

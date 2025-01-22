@@ -22,10 +22,11 @@ namespace NGroupingChallenge
 
 		int iGetNumberOfPoints() const { return (int)v_points.size(); };
 
-		int iGetLowerBound() const { return 1; };
+		int iGetLowerBound() const { return i_LOWER_BOUND; };
 		int iGetUpperBound() const { return i_number_of_groups; }
 
 	private:
+		const int i_LOWER_BOUND = 1;
 		const double d_WRONG_VALUE = -1;
 
 		int i_number_of_groups;

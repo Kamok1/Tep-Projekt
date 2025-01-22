@@ -59,9 +59,11 @@ void CIndividual::vMutate(double dMutationProbability)
     }
 }
 
-std::pair<CIndividual, CIndividual> CIndividual::cCrossover(const CIndividual& cOther) const
+std::pair<CIndividual, CIndividual> CIndividual::cCrossover(const CIndividual& cOther, double dCrossoverProbabilty) const
 {
-    if (v_genes.empty() || cOther.v_genes.empty())
+    std::uniform_real_distribution<double> c_probability_distribution(d_MIN_PROPABILITY, d_MAX_PROPABILITY);
+
+    if (v_genes.empty() || cOther.v_genes.empty() || c_probability_distribution(c_random_engine) > dCrossoverProbabilty)
     {
         return { *this, cOther };
     }
