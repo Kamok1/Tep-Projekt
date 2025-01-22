@@ -5,18 +5,15 @@
 
 using namespace NGroupingChallenge;
 
-CIndividual::CIndividual(int iNumGenes, int iLowerBound, int iUpperBound, std::mt19937* cRandomEngine)
-    : i_lower_bound(iLowerBound),
-    i_upper_bound(iUpperBound),
-    c_random_engine(cRandomEngine),
-    d_fitness(d_DEFAULT_FITNESS)
-{
+CIndividual::CIndividual(std::mt19937* cRandomEngine, CGroupingEvaluator& pcEvaluator)
+    : i_lower_bound(pcEvaluator.iGetLowerBound()),i_upper_bound(pcEvaluator.iGetUpperBound()), c_random_engine(cRandomEngine), d_fitness(d_DEFAULT_FITNESS), pc_evaluator(pcEvaluator)
+    {
     if (i_lower_bound > i_upper_bound)
     {
         std::swap(i_lower_bound, i_upper_bound);
     }
 
-    v_genes.resize(iNumGenes);
+    v_genes.resize(pcEvaluator.iGetNumberOfPoints());
 
     if (!c_random_engine)
     {
@@ -29,15 +26,13 @@ CIndividual::CIndividual(int iNumGenes, int iLowerBound, int iUpperBound, std::m
     }
 }
 
-CIndividual::CIndividual()
-    : d_fitness(d_DEFAULT_FITNESS), i_lower_bound(i_DEFAULT_LOWER_BOUND), i_upper_bound(i_DEFAULT_UPPER_BOUND), c_random_engine(nullptr){}
-
 CIndividual::CIndividual(const CIndividual& other)
     : v_genes(other.v_genes),
     d_fitness(other.d_fitness),
     i_lower_bound(other.i_lower_bound),
     i_upper_bound(other.i_upper_bound),
-    c_random_engine(other.c_random_engine)
+    c_random_engine(other.c_random_engine),
+    pc_evaluator(other.pc_evaluator)
 {
 }
 
@@ -98,8 +93,8 @@ std::pair<CIndividual, CIndividual> CIndividual::cCrossover(const CIndividual& c
     v_child1_genes.insert(v_child1_genes.end(), cOther.v_genes.begin() + i_crossover_point, cOther.v_genes.end());
     v_child2_genes.insert(v_child2_genes.end(), v_genes.begin() + i_crossover_point, v_genes.end());
 
-    CIndividual c_child1(static_cast<int>(v_genes.size()), i_lower_bound, i_upper_bound, c_random_engine);
-    CIndividual c_child2(static_cast<int>(v_genes.size()), i_lower_bound, i_upper_bound, c_random_engine);
+    CIndividual c_child1(c_random_engine, pc_evaluator);
+    CIndividual c_child2(c_random_engine, pc_evaluator);
 
     c_child1.vSetGenes(v_child1_genes);
     c_child2.vSetGenes(v_child2_genes);
@@ -107,8 +102,13 @@ std::pair<CIndividual, CIndividual> CIndividual::cCrossover(const CIndividual& c
     return { c_child1, c_child2 };
 }
 
-double CIndividual::dGetFitness() const
+
+double CIndividual::dGetFitness()
 {
+    if (d_fitness == d_DEFAULT_FITNESS)
+    {
+        d_fitness = pc_evaluator.dEvaluate(v_genes);
+    }
     return d_fitness;
 }
 

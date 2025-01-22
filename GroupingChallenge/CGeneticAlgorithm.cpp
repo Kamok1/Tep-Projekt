@@ -6,7 +6,8 @@
 
 using namespace NGroupingChallenge;
 
-CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLowerBound, int iUpperBound, double dCrossoverProbabilty, double dMutationProbability, int iNumIterations, mt19937* cSharedRandomEngine)
+CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLowerBound, int iUpperBound, double dCrossoverProbabilty,
+    double dMutationProbability, int iNumIterations, mt19937* cSharedRandomEngine, CGroupingEvaluator& pcEvaluator)
     : i_population_size(iPopulationSize),
     i_num_genes(iNumGenes),
     i_lower_bound(iLowerBound),
@@ -15,6 +16,8 @@ CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLo
     d_mutation_probability(dMutationProbability),
     i_num_iterations(iNumIterations),
     c_random_engine(cSharedRandomEngine),
+    pc_evaluator(pcEvaluator),
+    c_best_individual(cSharedRandomEngine, pcEvaluator),
     d_best_fitness(numeric_limits<double>::max()){}
 
 CGeneticAlgorithm::~CGeneticAlgorithm()
@@ -31,22 +34,15 @@ void CGeneticAlgorithm::vInitializePopulation()
 {
     for (int i = 0; i < i_population_size; ++i)
     {
-        v_population.push_back(new CIndividual(i_num_genes, i_lower_bound, i_upper_bound, c_random_engine));
+        v_population.push_back(new CIndividual(c_random_engine, pc_evaluator));
     }
-}
-
-
-void CGeneticAlgorithm::vSetEvaluator(CGroupingEvaluator& cEvaluator)
-{
-    pc_evaluator = &cEvaluator;
 }
 
 void CGeneticAlgorithm::vEvaluatePopulation()
 {
     for (auto& individual : v_population)
     {
-        double d_fitness = pc_evaluator->dEvaluate(individual->vGetGenes());
-        individual->vSetFitness(d_fitness);
+        double d_fitness = individual->dGetFitness();
         if (d_fitness < d_best_fitness)
         {
             d_best_fitness = d_fitness;
@@ -126,7 +122,7 @@ void CGeneticAlgorithm::vRun()
     }
 }
 
-const CIndividual& CGeneticAlgorithm::cGetBestIndividual() const
+CIndividual& CGeneticAlgorithm::cGetBestIndividual()
 {
     return c_best_individual;
 }

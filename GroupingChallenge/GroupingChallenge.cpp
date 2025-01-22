@@ -27,7 +27,7 @@ const string s_BEST_FITNESS_MESSAGE = "Best fitness: ";
 const string s_INVALID_BOUNDS_MESSAGE = "Invalid bounds";
 const string s_INVALID_PARAMETERS_MESSAGE = "Invalid algorithm parameters";
 
-void PrintBestIndividual(const CIndividual& c_best_individual)
+void PrintBestIndividual(CIndividual& c_best_individual)
 {
     cout << s_BEST_GENES_MESSAGE;
     for (auto gene : c_best_individual.vGetGenes())
@@ -69,12 +69,12 @@ int main()
         d_CROSSOVER_PROBABILITY,
         d_MUTATION_PROBABILITY,
         i_NUMBER_OF_ITERATIONS,
-        &c_factory.cGetRandomEngine()
+        &c_factory.cGetRandomEngine(),
+        *pc_evaluator
     );
-    c_algorithm.vSetEvaluator(*pc_evaluator);
     c_algorithm.vRun();
 
-    const CIndividual& c_best_individual = c_algorithm.cGetBestIndividual();
+    CIndividual& c_best_individual = c_algorithm.cGetBestIndividual();
     delete pc_evaluator;
 
     PrintBestIndividual(c_best_individual);
