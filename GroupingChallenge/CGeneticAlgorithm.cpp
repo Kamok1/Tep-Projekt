@@ -7,7 +7,7 @@
 using namespace NGroupingChallenge;
 
 CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, double dCrossoverProbabilty,
-    double dMutationProbability, int iNumIterations, mt19937* cSharedRandomEngine, CGroupingEvaluator& pcEvaluator)
+    double dMutationProbability, int iNumIterations, mt19937& cSharedRandomEngine, CGroupingEvaluator& pcEvaluator)
     : i_population_size(iPopulationSize),
     d_crossover_probability(dCrossoverProbabilty),
     d_mutation_probability(dMutationProbability),
@@ -62,8 +62,8 @@ std::vector<CIndividual*> CGeneticAlgorithm::vSelectParents()
     while (v_parents.size() < i_population_size)
     { 
 
-        int i_candidate1 = c_distribution(*c_random_engine);
-        int i_candidate2 = c_distribution(*c_random_engine);
+        int i_candidate1 = c_distribution(c_random_engine);
+        int i_candidate2 = c_distribution(c_random_engine);
 
         CIndividual* c_parent = cSelectBetterIndividual(v_population[i_candidate1], v_population[i_candidate2]);
         v_parents.push_back(c_parent);
@@ -82,7 +82,7 @@ void CGeneticAlgorithm::vGenerateNewPopulation(const std::vector<CIndividual*>& 
         CIndividual* parent1 = vParents[i];
         CIndividual* parent2 = (i + i_DEFAULT_NEXT_PARENT_INDEX < vParents.size()) ? vParents[i + i_DEFAULT_NEXT_PARENT_INDEX] : vParents[i];
 
-        if (c_probability_distribution(*c_random_engine) < d_mutation_probability)
+        if (c_probability_distribution(c_random_engine) < d_mutation_probability)
         {;
             new_v_population.push_back(new CIndividual(*parent1));
             new_v_population.push_back(new CIndividual(*parent2));

@@ -14,7 +14,7 @@ namespace NGroupingChallenge
     class CGeneticAlgorithm
     {
     public:
-        CGeneticAlgorithm(int iPopulationSize, double dCrossoverProbabilty, double dMutationProbability, int iNumIterations, mt19937* cSharedRandomEngine, CGroupingEvaluator& pcEvaluator);
+        CGeneticAlgorithm(int iPopulationSize, double dCrossoverProbabilty, double dMutationProbability, int iNumIterations, mt19937& cSharedRandomEngine, CGroupingEvaluator& pcEvaluator);
         ~CGeneticAlgorithm();
         void vRun();
         CIndividual& cGetBestIndividual();
@@ -36,7 +36,7 @@ namespace NGroupingChallenge
         std::vector<CIndividual*> v_population;
         CIndividual c_best_individual;
         double d_best_fitness;
-        mt19937* c_random_engine;
+        mt19937& c_random_engine;
         CGroupingEvaluator& pc_evaluator;
 
     };

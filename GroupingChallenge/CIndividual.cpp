@@ -5,7 +5,7 @@
 
 using namespace NGroupingChallenge;
 
-CIndividual::CIndividual(std::mt19937* cRandomEngine, CGroupingEvaluator& pcEvaluator)
+CIndividual::CIndividual(std::mt19937& cRandomEngine, CGroupingEvaluator& pcEvaluator)
     : i_lower_bound(pcEvaluator.iGetLowerBound()),i_upper_bound(pcEvaluator.iGetUpperBound()), c_random_engine(cRandomEngine), d_fitness(d_DEFAULT_FITNESS), pc_evaluator(pcEvaluator)
     {
     if (i_lower_bound > i_upper_bound)
@@ -14,16 +14,7 @@ CIndividual::CIndividual(std::mt19937* cRandomEngine, CGroupingEvaluator& pcEval
     }
 
     v_genes.resize(pcEvaluator.iGetNumberOfPoints());
-
-    if (!c_random_engine)
-    {
-        std::fill(v_genes.begin(), v_genes.end(), i_lower_bound);
-    }
-    else
-    {
-        std::uniform_int_distribution<int> c_distribution(i_lower_bound, i_upper_bound);
-        std::generate(v_genes.begin(), v_genes.end(), [&]() { return c_distribution(*c_random_engine); });
-    }
+    std::fill(v_genes.begin(), v_genes.end(), i_lower_bound);
 }
 
 CIndividual::CIndividual(const CIndividual& other)
@@ -56,19 +47,14 @@ void CIndividual::vSetFitness(double dFitness)
 
 void CIndividual::vMutate(double dMutationProbability)
 {
-    if (!c_random_engine)
-    {
-        return;
-    }
-
     std::uniform_real_distribution<double> c_probability_distribution(d_MIN_PROPABILITY, d_MAX_PROPABILITY);
     std::uniform_int_distribution<int> c_value_distribution(i_lower_bound, i_upper_bound);
 
     for (auto& gene : v_genes)
     {
-        if (c_probability_distribution(*c_random_engine) < dMutationProbability)
+        if (c_probability_distribution(c_random_engine) < dMutationProbability)
         {
-            gene = c_value_distribution(*c_random_engine);
+            gene = c_value_distribution(c_random_engine);
         }
     }
 }
@@ -80,12 +66,8 @@ std::pair<CIndividual, CIndividual> CIndividual::cCrossover(const CIndividual& c
         return { *this, cOther };
     }
 
-    int i_crossover_point = i_DEFAULT_CROSSOVER_POINT;
-    if (c_random_engine)
-    {
-        std::uniform_int_distribution<size_t> c_point_distribution(i_MIN_CROSSOVER_POINT, v_genes.size() - 1);
-        i_crossover_point = c_point_distribution(*c_random_engine);
-    }
+    std::uniform_int_distribution<size_t> c_point_distribution(i_MIN_CROSSOVER_POINT, v_genes.size() - 1);
+    int i_crossover_point = c_point_distribution(c_random_engine);
 
     std::vector<int> v_child1_genes(v_genes.begin(), v_genes.begin() + i_crossover_point);
     std::vector<int> v_child2_genes(cOther.v_genes.begin(), cOther.v_genes.begin() + i_crossover_point);

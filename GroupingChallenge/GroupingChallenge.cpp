@@ -66,7 +66,7 @@ int main()
         d_CROSSOVER_PROBABILITY,
         d_MUTATION_PROBABILITY,
         i_NUMBER_OF_ITERATIONS,
-        &c_factory.cGetRandomEngine(),
+        c_factory.cGetRandomEngine(),
         *pc_evaluator
     );
     c_algorithm.vRun();

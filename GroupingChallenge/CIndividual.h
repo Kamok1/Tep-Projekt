@@ -12,7 +12,7 @@ namespace NGroupingChallenge
     class CIndividual
     {
     public:
-        CIndividual(mt19937* cRandomEngine, CGroupingEvaluator& pcEvaluator);
+        CIndividual(mt19937& cRandomEngine, CGroupingEvaluator& pcEvaluator);
         CIndividual(const CIndividual& other);
         CIndividual& operator=(const CIndividual& other);
         void vMutate(double dMutationProbability);
@@ -33,7 +33,7 @@ namespace NGroupingChallenge
         double d_fitness;
         int i_lower_bound;
         int i_upper_bound;
-        mt19937* c_random_engine;
+        mt19937& c_random_engine;
         CGroupingEvaluator& pc_evaluator;
 
     };
