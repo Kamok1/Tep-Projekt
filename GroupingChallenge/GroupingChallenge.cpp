@@ -63,9 +63,6 @@ int main()
 
     CGeneticAlgorithm c_algorithm(
         i_POPULATION_SIZE,
-        i_NUMBER_OF_POINTS,
-        i_LOWER_BOUND,
-        i_UPPER_BOUND,
         d_CROSSOVER_PROBABILITY,
         d_MUTATION_PROBABILITY,
         i_NUMBER_OF_ITERATIONS,

@@ -6,12 +6,9 @@
 
 using namespace NGroupingChallenge;
 
-CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, int iNumGenes, int iLowerBound, int iUpperBound, double dCrossoverProbabilty,
+CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, double dCrossoverProbabilty,
     double dMutationProbability, int iNumIterations, mt19937* cSharedRandomEngine, CGroupingEvaluator& pcEvaluator)
     : i_population_size(iPopulationSize),
-    i_num_genes(iNumGenes),
-    i_lower_bound(iLowerBound),
-    i_upper_bound(iUpperBound),
     d_crossover_probability(dCrossoverProbabilty),
     d_mutation_probability(dMutationProbability),
     i_num_iterations(iNumIterations),
