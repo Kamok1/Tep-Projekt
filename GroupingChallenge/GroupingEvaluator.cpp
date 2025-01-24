@@ -27,7 +27,7 @@ double CGroupingEvaluator::dEvaluate(const int* piSolution) const
 
 					if (d_distance >= 0)
 					{
-						d_distance_sum += 2.0 * v_points[i].dCalculateDistance(v_points[j]);
+						d_distance_sum += 2.0 * d_distance;
 					}
 					else
 					{

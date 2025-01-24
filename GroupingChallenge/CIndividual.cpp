@@ -13,8 +13,10 @@ CIndividual::CIndividual(std::mt19937& cRandomEngine, CGroupingEvaluator& pcEval
         std::swap(i_lower_bound, i_upper_bound);
     }
 
+
     v_genes.resize(pcEvaluator.iGetNumberOfPoints());
-    std::fill(v_genes.begin(), v_genes.end(), i_lower_bound);
+    std::uniform_int_distribution<int> c_distribution(i_lower_bound, i_upper_bound);
+    std::generate(v_genes.begin(), v_genes.end(), [&]() { return c_distribution(c_random_engine); });
 }
 
 CIndividual::CIndividual(const CIndividual& other)
@@ -70,6 +72,33 @@ void CIndividual::vMutate(double dMutationProbability)
     }
 }
 
+//std::pair<CIndividual*, CIndividual*> CIndividual::cCrossover(const CIndividual& cOther, double dCrossoverProbabilty) const
+//{
+//    std::uniform_real_distribution<double> c_probability_distribution(d_MIN_PROPABILITY, d_MAX_PROPABILITY);
+//
+//    if (v_genes.empty() || cOther.v_genes.empty() || c_probability_distribution(c_random_engine) > dCrossoverProbabilty)
+//    {
+//        return { new CIndividual(*this), new CIndividual(cOther) };
+//    }
+//
+//    std::uniform_int_distribution<size_t> c_point_distribution(i_MIN_CROSSOVER_POINT, v_genes.size() - 1);
+//    int i_crossover_point = c_point_distribution(c_random_engine);
+//
+//    std::vector<int> v_child1_genes(v_genes.begin(), v_genes.begin() + i_crossover_point);
+//    std::vector<int> v_child2_genes(cOther.v_genes.begin(), cOther.v_genes.begin() + i_crossover_point);
+//
+//    v_child1_genes.insert(v_child1_genes.end(), cOther.v_genes.begin() + i_crossover_point, cOther.v_genes.end());
+//    v_child2_genes.insert(v_child2_genes.end(), v_genes.begin() + i_crossover_point, v_genes.end());
+//
+//    CIndividual* c_child1 = new CIndividual(c_random_engine, pc_evaluator);
+//    CIndividual* c_child2 = new CIndividual(c_random_engine, pc_evaluator);
+//
+//    c_child1->vSetGenes(v_child1_genes);
+//    c_child2->vSetGenes(v_child2_genes);
+//
+//    return { c_child1, c_child2 };
+//}
+
 std::pair<CIndividual*, CIndividual*> CIndividual::cCrossover(const CIndividual& cOther, double dCrossoverProbabilty) const
 {
     std::uniform_real_distribution<double> c_probability_distribution(d_MIN_PROPABILITY, d_MAX_PROPABILITY);
@@ -79,14 +108,20 @@ std::pair<CIndividual*, CIndividual*> CIndividual::cCrossover(const CIndividual&
         return { new CIndividual(*this), new CIndividual(cOther) };
     }
 
-    std::uniform_int_distribution<size_t> c_point_distribution(i_MIN_CROSSOVER_POINT, v_genes.size() - 1);
-    int i_crossover_point = c_point_distribution(c_random_engine);
+    std::uniform_int_distribution<size_t> c_point_distribution(1, v_genes.size() - 1);
+    size_t i_crossover_point = c_point_distribution(c_random_engine);
 
-    std::vector<int> v_child1_genes(v_genes.begin(), v_genes.begin() + i_crossover_point);
-    std::vector<int> v_child2_genes(cOther.v_genes.begin(), cOther.v_genes.begin() + i_crossover_point);
+    std::vector<int> v_parent1_part1(v_genes.begin(), v_genes.begin() + i_crossover_point);
+    std::vector<int> v_parent1_part2(v_genes.begin() + i_crossover_point, v_genes.end());
 
-    v_child1_genes.insert(v_child1_genes.end(), cOther.v_genes.begin() + i_crossover_point, cOther.v_genes.end());
-    v_child2_genes.insert(v_child2_genes.end(), v_genes.begin() + i_crossover_point, v_genes.end());
+    std::vector<int> v_parent2_part1(cOther.v_genes.begin(), cOther.v_genes.begin() + i_crossover_point);
+    std::vector<int> v_parent2_part2(cOther.v_genes.begin() + i_crossover_point, cOther.v_genes.end());
+
+    std::vector<int> v_child1_genes = v_parent1_part1;
+    v_child1_genes.insert(v_child1_genes.end(), v_parent2_part2.begin(), v_parent2_part2.end());
+
+    std::vector<int> v_child2_genes = v_parent1_part2;
+    v_child2_genes.insert(v_child2_genes.end(), v_parent2_part1.begin(), v_parent2_part1.end());
 
     CIndividual* c_child1 = new CIndividual(c_random_engine, pc_evaluator);
     CIndividual* c_child2 = new CIndividual(c_random_engine, pc_evaluator);

@@ -10,7 +10,7 @@ using namespace NGroupingChallenge;
 const int i_NUMBER_OF_GROUPS = 5;
 const int i_NUMBER_OF_POINTS = 30;
 const int i_POPULATION_SIZE = 20;
-const int i_NUMBER_OF_ITERATIONS = 20000;
+const int i_NUMBER_OF_ITERATIONS = 100;
 const int i_DIMENSIONS = 3;
 const int i_DIMENSION_MEAN_MIN = -100;
 const int i_DIMENSION_MEAN_MAX = 100;
@@ -38,6 +38,12 @@ void PrintBestIndividual(CIndividual& c_best_individual)
 
 int main()
 {
+    if (i_POPULATION_SIZE <= 0 || i_NUMBER_OF_POINTS < 0 || d_MUTATION_PROBABILITY > 1 || i_NUMBER_OF_ITERATIONS <= 0)
+    {
+        cerr << s_INVALID_PARAMETERS_MESSAGE << endl;
+        return 1;
+    }
+
     CGaussianGroupingEvaluatorFactory c_factory(i_NUMBER_OF_GROUPS, i_NUMBER_OF_POINTS);
     for (int i = 0; i < i_DIMENSIONS; i++)
     {
@@ -45,13 +51,6 @@ int main()
     }
 
     CGroupingEvaluator* pc_evaluator(c_factory.pcCreateEvaluator());
-
-
-    if (i_POPULATION_SIZE <= 0 || i_NUMBER_OF_POINTS < 0 || d_MUTATION_PROBABILITY > 1 || i_NUMBER_OF_ITERATIONS <= 0)
-    {
-        cerr << s_INVALID_PARAMETERS_MESSAGE << endl;
-        return 1;
-    }
 
     CGeneticAlgorithm c_algorithm(
         i_POPULATION_SIZE,
